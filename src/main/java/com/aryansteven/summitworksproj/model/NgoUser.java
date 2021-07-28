@@ -15,32 +15,27 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "user")
 public class NgoUser implements Serializable {
-  
-  
-  @OneToMany(mappedBy="user")
+  @OneToMany(mappedBy = "user")
   private Set<NgoTicket> tickets;
 
-
-  
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Integer id;
 
-  @Column(name="first_name")
+  @Column(name = "first_name")
   private String first_name;
 
-  @Column(name="last_name")
+  @Column(name = "last_name")
   private String last_name;
 
-  @Column(name="email", unique=true)
+  @Column(name = "email", unique = true)
   private String email;
 
-  @Column(name="password")
+  @Column(name = "password")
   private String password;
 
-  @Column(name="role")
+  @Column(name = "role")
   private String role;
-
 
   public NgoUser() {
   }
@@ -133,14 +128,16 @@ public class NgoUser implements Serializable {
   }
 
   @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof NgoUser)) {
-            return false;
-        }
-        NgoUser ngoUser = (NgoUser) o;
-        return Objects.equals(id, ngoUser.id) && Objects.equals(first_name, ngoUser.first_name) && Objects.equals(last_name, ngoUser.last_name) && Objects.equals(email, ngoUser.email) && Objects.equals(password, ngoUser.password) && Objects.equals(role, ngoUser.role);
+  public boolean equals(Object o) {
+    if (o == this)
+      return true;
+    if (!(o instanceof NgoUser)) {
+      return false;
+    }
+    NgoUser ngoUser = (NgoUser) o;
+    return Objects.equals(id, ngoUser.id) && Objects.equals(first_name, ngoUser.first_name)
+        && Objects.equals(last_name, ngoUser.last_name) && Objects.equals(email, ngoUser.email)
+        && Objects.equals(password, ngoUser.password) && Objects.equals(role, ngoUser.role);
   }
 
   @Override
@@ -150,15 +147,9 @@ public class NgoUser implements Serializable {
 
   @Override
   public String toString() {
-    return "{" +
-      " id='" + getId() + "'" +
-      ", first_name='" + getFirst_name() + "'" +
-      ", last_name='" + getLast_name() + "'" +
-      ", email='" + getEmail() + "'" +
-      ", password='" + getPassword() + "'" +
-      ", role='" + getRole() + "'" +
-      "}";
+    return "{" + " id='" + getId() + "'" + ", first_name='" + getFirst_name() + "'" + ", last_name='" + getLast_name()
+        + "'" + ", email='" + getEmail() + "'" + ", password='" + getPassword() + "'" + ", role='" + getRole() + "'"
+        + "}";
   }
-
 
 }

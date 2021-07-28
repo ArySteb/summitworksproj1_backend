@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,10 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 
 @Entity
 @Table(name = "event")
@@ -22,50 +21,49 @@ public class NgoEvent implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
- 
-  @ManyToOne
-  @JoinColumn(name="id", nullable=false, insertable=false, updatable=false)
-  private NgoTicket ticket;
 
+  @OneToMany(mappedBy = "event")
+  private Set<NgoTicket> tickets;
 
-  @Column(name="event_name", length=50, unique=false)
+  @Column(name = "event_name", length = 50, unique = false)
   private String name;
-  
-  @Column(name="event_description", length=300)
+
+  @Column(name = "event_description", length = 300)
   private String desc;
-  
-  @Column(name="category", length=10)
+
+  @Column(name = "category", length = 10)
   private String category;
-  
-  @Column(name="start_date")
+
+  @Column(name = "start_date")
   private LocalDate start_date;
- 
-  @Column(name="end_date")
+
+  @Column(name = "end_date")
   private LocalDate end_date;
-  
-  @Column(name="start_time")
-  private LocalTime start_time;  
-  
-  @Column(name="end_time")
+
+  @Column(name = "start_time")
+  private LocalTime start_time;
+
+  @Column(name = "end_time")
   private LocalTime end_time;
 
-  @Column(name="allow_reg")
+  @Column(name = "allow_reg")
   private boolean allow_reg;
 
-  @Column(name="img_url")
+  @Column(name = "img_url")
   private String img_url;
 
-  @Column(name="adult_price")
+  @Column(name = "adult_price")
   private Integer adult_price;
-  
-  @Column(name="child_price")
-  private Integer child_price;
 
+  @Column(name = "child_price")
+  private Integer child_price;
 
   public NgoEvent() {
   }
 
-  public NgoEvent(Integer id, String name, String desc, String category, LocalDate start_date, LocalDate end_date, LocalTime start_time, LocalTime end_time, boolean allow_reg, String img_url, Integer adult_price, Integer child_price) {
+  public NgoEvent(Integer id, String name, String desc, String category, LocalDate start_date, LocalDate end_date,
+      LocalTime start_time, LocalTime end_time, boolean allow_reg, String img_url, Integer adult_price,
+      Integer child_price) {
     this.id = id;
     this.name = name;
     this.desc = desc;
@@ -241,38 +239,34 @@ public class NgoEvent implements Serializable {
   }
 
   @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof NgoEvent)) {
-            return false;
-        }
-        NgoEvent ngoEvent = (NgoEvent) o;
-        return Objects.equals(id, ngoEvent.id) && Objects.equals(name, ngoEvent.name) && Objects.equals(desc, ngoEvent.desc) && Objects.equals(category, ngoEvent.category) && Objects.equals(start_date, ngoEvent.start_date) && Objects.equals(end_date, ngoEvent.end_date) && Objects.equals(start_time, ngoEvent.start_time) && Objects.equals(end_time, ngoEvent.end_time) && allow_reg == ngoEvent.allow_reg && Objects.equals(img_url, ngoEvent.img_url) && Objects.equals(adult_price, ngoEvent.adult_price) && Objects.equals(child_price, ngoEvent.child_price);
+  public boolean equals(Object o) {
+    if (o == this)
+      return true;
+    if (!(o instanceof NgoEvent)) {
+      return false;
+    }
+    NgoEvent ngoEvent = (NgoEvent) o;
+    return Objects.equals(id, ngoEvent.id) && Objects.equals(name, ngoEvent.name) && Objects.equals(desc, ngoEvent.desc)
+        && Objects.equals(category, ngoEvent.category) && Objects.equals(start_date, ngoEvent.start_date)
+        && Objects.equals(end_date, ngoEvent.end_date) && Objects.equals(start_time, ngoEvent.start_time)
+        && Objects.equals(end_time, ngoEvent.end_time) && allow_reg == ngoEvent.allow_reg
+        && Objects.equals(img_url, ngoEvent.img_url) && Objects.equals(adult_price, ngoEvent.adult_price)
+        && Objects.equals(child_price, ngoEvent.child_price);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, desc, category, start_date, end_date, start_time, end_time, allow_reg, img_url, adult_price, child_price);
+    return Objects.hash(id, name, desc, category, start_date, end_date, start_time, end_time, allow_reg, img_url,
+        adult_price, child_price);
   }
 
   @Override
   public String toString() {
-    return "{" +
-      " id='" + getId() + "'" +
-      ", name='" + getName() + "'" +
-      ", desc='" + getDesc() + "'" +
-      ", category='" + getCategory() + "'" +
-      ", start_date='" + getStart_date() + "'" +
-      ", end_date='" + getEnd_date() + "'" +
-      ", start_time='" + getStart_time() + "'" +
-      ", end_time='" + getEnd_time() + "'" +
-      ", allow_reg='" + isAllow_reg() + "'" +
-      ", img_url='" + getImg_url() + "'" +
-      ", adult_price='" + getAdult_price() + "'" +
-      ", child_price='" + getChild_price() + "'" +
-      "}";
+    return "{" + " id='" + getId() + "'" + ", name='" + getName() + "'" + ", desc='" + getDesc() + "'" + ", category='"
+        + getCategory() + "'" + ", start_date='" + getStart_date() + "'" + ", end_date='" + getEnd_date() + "'"
+        + ", start_time='" + getStart_time() + "'" + ", end_time='" + getEnd_time() + "'" + ", allow_reg='"
+        + isAllow_reg() + "'" + ", img_url='" + getImg_url() + "'" + ", adult_price='" + getAdult_price() + "'"
+        + ", child_price='" + getChild_price() + "'" + "}";
   }
-
 
 }

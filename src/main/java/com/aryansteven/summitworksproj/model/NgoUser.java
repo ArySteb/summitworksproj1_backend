@@ -2,17 +2,26 @@ package com.aryansteven.summitworksproj.model;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "event")
+@Table(name = "user")
 public class NgoUser implements Serializable {
+  
+  
+  @OneToMany(mappedBy="user")
+  private Set<NgoTicket> tickets;
+
+
+  
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Integer id;

@@ -2,12 +2,16 @@ package com.aryansteven.summitworksproj.model;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -17,8 +21,12 @@ public class NgoTicket implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Integer id;
 
-  @Column(name="user_id")
-  private String user_id;
+  @OneToMany(mappedBy="ticket")
+  private Set<NgoEvent> events;
+
+  @ManyToOne
+  @JoinColumn(name="id", nullable= false)
+  private NgoUser user;
 
   @Column(name="event_id")
   private String event_id;
@@ -45,9 +53,9 @@ public class NgoTicket implements Serializable {
   public NgoTicket() {
   }
 
-  public NgoTicket(Integer id, String user_id, String event_id, String first_name, String email, Integer contact_number, String address, Integer adult_qty, Integer child_qty) {
+  public NgoTicket(Integer id, NgoUser user_id, String event_id, String first_name, String email, Integer contact_number, String address, Integer adult_qty, Integer child_qty) {
     this.id = id;
-    this.user_id = user_id;
+    this.user = user_id;
     this.event_id = event_id;
     this.first_name = first_name;
     this.email = email;
@@ -65,12 +73,12 @@ public class NgoTicket implements Serializable {
     this.id = id;
   }
 
-  public String getUser_id() {
-    return this.user_id;
+  public NgoUser getUser_id() {
+    return this.user;
   }
 
-  public void setUser_id(String user_id) {
-    this.user_id = user_id;
+  public void setUser_id(NgoUser user_id) {
+    this.user = user_id;
   }
 
   public String getEvent_id() {
@@ -134,7 +142,7 @@ public class NgoTicket implements Serializable {
     return this;
   }
 
-  public NgoTicket user_id(String user_id) {
+  public NgoTicket user_id(NgoUser user_id) {
     setUser_id(user_id);
     return this;
   }
@@ -182,12 +190,12 @@ public class NgoTicket implements Serializable {
             return false;
         }
         NgoTicket ngoTicket = (NgoTicket) o;
-        return Objects.equals(id, ngoTicket.id) && Objects.equals(user_id, ngoTicket.user_id) && Objects.equals(event_id, ngoTicket.event_id) && Objects.equals(first_name, ngoTicket.first_name) && Objects.equals(email, ngoTicket.email) && Objects.equals(contact_number, ngoTicket.contact_number) && Objects.equals(address, ngoTicket.address) && Objects.equals(adult_qty, ngoTicket.adult_qty) && Objects.equals(child_qty, ngoTicket.child_qty);
+        return Objects.equals(id, ngoTicket.id) && Objects.equals(user, ngoTicket.user) && Objects.equals(event_id, ngoTicket.event_id) && Objects.equals(first_name, ngoTicket.first_name) && Objects.equals(email, ngoTicket.email) && Objects.equals(contact_number, ngoTicket.contact_number) && Objects.equals(address, ngoTicket.address) && Objects.equals(adult_qty, ngoTicket.adult_qty) && Objects.equals(child_qty, ngoTicket.child_qty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, user_id, event_id, first_name, email, contact_number, address, adult_qty, child_qty);
+    return Objects.hash(id, user, event_id, first_name, email, contact_number, address, adult_qty, child_qty);
   }
 
   @Override

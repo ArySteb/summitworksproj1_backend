@@ -22,9 +22,6 @@ public class NgoEvent implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @OneToMany(mappedBy = "event")
-  private Set<NgoTicket> tickets;
-
   @Column(name = "event_name", length = 50, unique = false)
   private String name;
 
@@ -57,6 +54,9 @@ public class NgoEvent implements Serializable {
 
   @Column(name = "child_price")
   private Integer child_price;
+
+  @OneToMany(mappedBy = "event")
+  private Set<NgoTicket> tickets;
 
   public NgoEvent() {
   }

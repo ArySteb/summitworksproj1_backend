@@ -19,14 +19,6 @@ public class NgoTicket implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Integer id;
 
-  @ManyToOne
-  @JoinColumn(name = "event_id", nullable = false)
-  private NgoEvent event;
-
-  @ManyToOne
-  @JoinColumn(name = "user_id", nullable = false)
-  private NgoUser user;
-
   @Column(name = "first_name")
   private String first_name;
 
@@ -44,6 +36,14 @@ public class NgoTicket implements Serializable {
 
   @Column(name = "child_qty")
   private Integer child_qty;
+
+  @ManyToOne
+  @JoinColumn(name = "event_id", nullable = false)
+  private NgoEvent event;
+
+  @ManyToOne
+  @JoinColumn(name = "user_id", nullable = false)
+  private NgoUser user;
 
   public NgoTicket() {
   }

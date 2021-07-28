@@ -15,9 +15,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "user")
 public class NgoUser implements Serializable {
-  @OneToMany(mappedBy = "user")
-  private Set<NgoTicket> tickets;
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Integer id;
@@ -36,6 +33,9 @@ public class NgoUser implements Serializable {
 
   @Column(name = "role")
   private String role;
+
+  @OneToMany(mappedBy = "user")
+  private Set<NgoTicket> tickets;
 
   public NgoUser() {
   }

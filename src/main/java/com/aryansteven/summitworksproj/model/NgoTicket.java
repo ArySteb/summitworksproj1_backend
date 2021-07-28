@@ -25,7 +25,7 @@ public class NgoTicket implements Serializable {
   private Set<NgoEvent> events;
 
   @ManyToOne
-  @JoinColumn(name="id", nullable= false)
+  @JoinColumn(name="id", nullable= false, insertable=false, updatable=false)
   private NgoUser user;
 
   @Column(name="event_id")

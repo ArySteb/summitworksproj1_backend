@@ -25,7 +25,7 @@ public class NgoEvent implements Serializable {
   private Integer id;
  
   @ManyToOne
-  @JoinColumn(name="id", nullable=false)
+  @JoinColumn(name="id", nullable=false, insertable=false, updatable=false)
   private NgoTicket ticket;
 
 
@@ -39,11 +39,9 @@ public class NgoEvent implements Serializable {
   private String category;
   
   @Column(name="start_date")
-  @Temporal(TemporalType.DATE)
   private LocalDate start_date;
  
   @Column(name="end_date")
-  @Temporal(TemporalType.DATE)
   private LocalDate end_date;
   
   @Column(name="start_time")

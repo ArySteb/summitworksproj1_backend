@@ -7,7 +7,9 @@ import com.aryansteven.summitworksproj.model.NgoUser;
 import com.aryansteven.summitworksproj.repo.NgoUserRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class NgoUserServiceImpl implements NgoUserService {
   NgoUserRepo userRepo;
 

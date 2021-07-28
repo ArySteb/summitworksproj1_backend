@@ -7,7 +7,9 @@ import com.aryansteven.summitworksproj.model.NgoTicket;
 import com.aryansteven.summitworksproj.repo.NgoTicketRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class NgoTicketServiceImpl implements NgoTicketService {
   NgoTicketRepo ticketRepo;
 

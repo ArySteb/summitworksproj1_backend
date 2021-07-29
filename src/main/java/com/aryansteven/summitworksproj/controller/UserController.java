@@ -3,7 +3,6 @@ package com.aryansteven.summitworksproj.controller;
 import java.util.List;
 import java.util.Optional;
 
-
 import com.aryansteven.summitworksproj.model.NgoUser;
 import com.aryansteven.summitworksproj.service.NgoUserService;
 
@@ -18,40 +17,32 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UserController {
+  NgoUserService userServ;
 
-    NgoUserService userServ;
+  @GetMapping("/user")
+  List<NgoUser> getAll() {
+    return userServ.getAll();
+  }
 
+  @PostMapping("/user")
+  NgoUser postUser(@RequestBody NgoUser newUser) {
+    return userServ.addUser(newUser);
+  }
 
-    @GetMapping("/user")
-    List<NgoUser> getAll() {
-        return userServ.getAll();
-      }
+  @PutMapping("/user/{id}")
+  Optional<NgoUser> putUser(@RequestBody NgoUser user, @PathVariable Integer id) {
 
-    @PostMapping("/user")
-    NgoUser postUser(@RequestBody NgoUser newUser){
-        return userServ.addUser(newUser);
-    }
+    return userServ.updateUser(user, id);
 
-    @PutMapping("/user/{id}")
-    Optional<NgoUser> putUser(@RequestBody NgoUser user, @PathVariable Integer id){
-        
-        return userServ.updateUser(user, id);
-        
-    }
+  }
 
-    @DeleteMapping("/user/{id}")
-    void deleteUser(@PathVariable Integer id){
-        userServ.delUserById(id);
-    }
+  @DeleteMapping("/user/{id}")
+  void deleteUser(@PathVariable Integer id) {
+    userServ.delUserById(id);
+  }
 
-
-    @Autowired
-    public void setUserServ(NgoUserService userServ) {
-        this.userServ = userServ;
-    }
-
-
-
-
-
+  @Autowired
+  public void setUserServ(NgoUserService userServ) {
+    this.userServ = userServ;
+  }
 }

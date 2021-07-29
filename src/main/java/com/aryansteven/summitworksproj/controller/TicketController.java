@@ -17,40 +17,32 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TicketController {
+  NgoTicketService ticketServ;
 
-    NgoTicketService ticketServ;
+  @GetMapping("/tickets")
+  List<NgoTicket> getAll() {
+    return ticketServ.getAll();
+  }
 
+  @PostMapping("/tickets")
+  NgoTicket postTicket(@RequestBody NgoTicket newTicket) {
+    return ticketServ.addTicket(newTicket);
+  }
 
-    @GetMapping("/tickets")
-    List<NgoTicket> getAll() {
-        return ticketServ.getAll();
-      }
+  @PutMapping("/tickets/{id}")
+  Optional<NgoTicket> putTicket(@RequestBody NgoTicket ticket, @PathVariable Integer id) {
 
-    @PostMapping("/tickets")
-    NgoTicket postTicket(@RequestBody NgoTicket newTicket){
-        return ticketServ.addTicket(newTicket);
-    }
+    return ticketServ.updateTicket(ticket, id);
 
-    @PutMapping("/tickets/{id}")
-    Optional<NgoTicket> putTicket(@RequestBody NgoTicket ticket, @PathVariable Integer id){
-        
-        return ticketServ.updateTicket(ticket, id);
-        
-    }
+  }
 
-    @DeleteMapping("/tickets/{id}")
-    void deleteTicket(@PathVariable Integer id){
-        ticketServ.delTicketById(id);
-    }
+  @DeleteMapping("/tickets/{id}")
+  void deleteTicket(@PathVariable Integer id) {
+    ticketServ.delTicketById(id);
+  }
 
-
-    @Autowired
-    public void setTicketServ(NgoTicketService ticketServ) {
-        this.ticketServ = ticketServ;
-    }
-
-
-
-
-
+  @Autowired
+  public void setTicketServ(NgoTicketService ticketServ) {
+    this.ticketServ = ticketServ;
+  }
 }

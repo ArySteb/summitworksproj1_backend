@@ -5,7 +5,9 @@ import java.util.Optional;
 
 import com.aryansteven.summitworksproj.model.NgoUser;
 
-public interface NgoUserService {
+import org.springframework.security.core.userdetails.UserDetailsService;
+
+public interface NgoUserService extends UserDetailsService{
   public List<NgoUser> getAll();
 
   public Optional<NgoUser> getById(Integer id);

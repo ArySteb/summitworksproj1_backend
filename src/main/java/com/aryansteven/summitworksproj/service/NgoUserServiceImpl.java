@@ -1,5 +1,6 @@
 package com.aryansteven.summitworksproj.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +8,10 @@ import com.aryansteven.summitworksproj.model.NgoUser;
 import com.aryansteven.summitworksproj.repo.NgoUserRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -45,5 +50,15 @@ public class NgoUserServiceImpl implements NgoUserService {
 
   public NgoUserRepo getUserRepo() {
     return userRepo;
+  }
+
+  @Override
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    NgoUser user = this.userRepo.findByEmail(email).orElseThrow(()->new UsernameNotFoundException("User not found"));
+
+    return new User(user.getEmail(), user.getPassword(), Arrays.asList(new SimpleGrantedAuthority("role_admin")));
+    
+
+    
   }
 }

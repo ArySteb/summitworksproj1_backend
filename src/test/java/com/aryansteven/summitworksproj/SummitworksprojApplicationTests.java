@@ -1,6 +1,6 @@
 package com.aryansteven.summitworksproj;
 
-import com.aryansteven.summitworksproj.controller.MainController;
+import com.aryansteven.summitworksproj.controller.TicketController;
 import com.aryansteven.summitworksproj.model.NgoEvent;
 import com.aryansteven.summitworksproj.model.NgoTicket;
 import com.aryansteven.summitworksproj.model.NgoUser;

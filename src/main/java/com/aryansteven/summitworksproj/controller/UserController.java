@@ -7,6 +7,7 @@ import com.aryansteven.summitworksproj.model.NgoUser;
 import com.aryansteven.summitworksproj.service.NgoUserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,35 +15,48 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 public class UserController {
-  NgoUserService userServ;
 
-  @GetMapping("/user")
-  List<NgoUser> getAll() {
-    return userServ.getAll();
-  }
+    NgoUserService userServ;
 
-  @PostMapping("/user")
-  NgoUser postUser(@RequestBody NgoUser newUser) {
-    return userServ.addUser(newUser);
-  }
+    @GetMapping("/users")
+    List<NgoUser> getAll() {
+        return userServ.getAll();
+    }
 
-  @PutMapping("/user/{id}")
-  Optional<NgoUser> putUser(@RequestBody NgoUser user, @PathVariable Integer id) {
+    @PostMapping("/users")
+    NgoUser postUser(@RequestBody NgoUser newUser) {
+        return userServ.addUser(newUser);
+    }
 
-    return userServ.updateUser(user, id);
+    @GetMapping("/users/{id}")
+    NgoUser getUser(@PathVariable Integer id) {
+        Optional<NgoUser> result = userServ.getById(id);
+        if (result.isPresent()) {
+            return result.get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The user wasn't found");
+        }
 
-  }
+    }
 
-  @DeleteMapping("/user/{id}")
-  void deleteUser(@PathVariable Integer id) {
-    userServ.delUserById(id);
-  }
+    @PutMapping("/users/{id}")
+    Optional<NgoUser> putUser(@RequestBody NgoUser user, @PathVariable Integer id) {
 
-  @Autowired
-  public void setUserServ(NgoUserService userServ) {
-    this.userServ = userServ;
-  }
+        return userServ.updateUser(user, id);
+
+    }
+
+    @DeleteMapping("/users/{id}")
+    void deleteUser(@PathVariable Integer id) {
+        userServ.delUserById(id);
+    }
+
+    @Autowired
+    public void setUserServ(NgoUserService userServ) {
+        this.userServ = userServ;
+    }
 }

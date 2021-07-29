@@ -7,6 +7,7 @@ import com.aryansteven.summitworksproj.model.NgoEvent;
 import com.aryansteven.summitworksproj.service.NgoEventService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,35 +15,48 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 public class EventController {
-  NgoEventService eventServ;
 
-  @GetMapping("/event")
-  List<NgoEvent> getAll() {
-    return eventServ.getAll();
-  }
+    NgoEventService eventServ;
 
-  @PostMapping("/user")
-  NgoEvent postEvent(@RequestBody NgoEvent newEvent) {
-    return eventServ.addEvent(newEvent);
-  }
+    @GetMapping("/events")
+    List<NgoEvent> getAll() {
+        return eventServ.getAll();
+    }
 
-  @PutMapping("/event/{id}")
-  Optional<NgoEvent> putEvent(@RequestBody NgoEvent event, @PathVariable Integer id) {
+    @GetMapping("/events/{id}")
+    NgoEvent getEvent(@PathVariable Integer id) {
+        Optional<NgoEvent> result = eventServ.getById(id);
+        if (result.isPresent()) {
+            return result.get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The event wasn't found");
+        }
 
-    return eventServ.updateEvent(event, id);
+    }
 
-  }
+    @PostMapping("/events")
+    NgoEvent postEvent(@RequestBody NgoEvent newEvent) {
+        return eventServ.addEvent(newEvent);
+    }
 
-  @DeleteMapping("/event/{id}")
-  void deleteEvent(@PathVariable Integer id) {
-    eventServ.delEventById(id);
-  }
+    @PutMapping("/events/{id}")
+    Optional<NgoEvent> putEvent(@RequestBody NgoEvent event, @PathVariable Integer id) {
 
-  @Autowired
-  public void setEventServ(NgoEventService eventServ) {
-    this.eventServ = eventServ;
-  }
+        return eventServ.updateEvent(event, id);
+
+    }
+
+    @DeleteMapping("/events/{id}")
+    void deleteEvent(@PathVariable Integer id) {
+        eventServ.delEventById(id);
+    }
+
+    @Autowired
+    public void setEventServ(NgoEventService eventServ) {
+        this.eventServ = eventServ;
+    }
 }

@@ -46,8 +46,8 @@ public class NgoUserServiceImpl implements NgoUserService {
     userRepo.findById(id).ifPresent(userRepo::delete);
   }
 
-  public Optional<NgoUser> getByEmail(String email){
-      return userRepo.findByEmail(email);
+  public Optional<NgoUser> getByEmail(String email) {
+    return userRepo.findByEmail(email);
   }
 
   @Autowired
@@ -61,13 +61,13 @@ public class NgoUserServiceImpl implements NgoUserService {
 
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    NgoUser user = this.userRepo.findByEmail(email).orElseThrow(()->new UsernameNotFoundException("User not found"));
+    NgoUser user = this.userRepo.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-    return new User(user.getEmail(), user.getPassword(), Arrays.asList(new SimpleGrantedAuthority("role_admin")));
+    return new User(user.getEmail(), user.getPassword(), Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN")));
   }
 
   @Autowired
   public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
-       this.passwordEncoder = passwordEncoder;
+    this.passwordEncoder = passwordEncoder;
   }
 }

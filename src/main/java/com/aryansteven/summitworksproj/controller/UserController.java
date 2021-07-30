@@ -19,44 +19,43 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 public class UserController {
+  NgoUserService userServ;
 
-    NgoUserService userServ;
+  @GetMapping("/users")
+  List<NgoUser> getAll() {
+    return userServ.getAll();
+  }
 
-    @GetMapping("/users")
-    List<NgoUser> getAll() {
-        return userServ.getAll();
+  @PostMapping("/users")
+  NgoUser postUser(@RequestBody NgoUser newUser) {
+    return userServ.addUser(newUser);
+  }
+
+  @GetMapping("/users/{id}")
+  NgoUser getUser(@PathVariable Integer id) {
+    Optional<NgoUser> result = userServ.getById(id);
+    if (result.isPresent()) {
+      return result.get();
+    } else {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The user wasn't found");
     }
 
-    @PostMapping("/users")
-    NgoUser postUser(@RequestBody NgoUser newUser) {
-        return userServ.addUser(newUser);
-    }
+  }
 
-    @GetMapping("/users/{id}")
-    NgoUser getUser(@PathVariable Integer id) {
-        Optional<NgoUser> result = userServ.getById(id);
-        if (result.isPresent()) {
-            return result.get();
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The user wasn't found");
-        }
+  @PutMapping("/users/{id}")
+  Optional<NgoUser> putUser(@RequestBody NgoUser user, @PathVariable Integer id) {
 
-    }
+    return userServ.updateUser(user, id);
 
-    @PutMapping("/users/{id}")
-    Optional<NgoUser> putUser(@RequestBody NgoUser user, @PathVariable Integer id) {
+  }
 
-        return userServ.updateUser(user, id);
+  @DeleteMapping("/users/{id}")
+  void deleteUser(@PathVariable Integer id) {
+    userServ.delUserById(id);
+  }
 
-    }
-
-    @DeleteMapping("/users/{id}")
-    void deleteUser(@PathVariable Integer id) {
-        userServ.delUserById(id);
-    }
-
-    @Autowired
-    public void setUserServ(NgoUserService userServ) {
-        this.userServ = userServ;
-    }
+  @Autowired
+  public void setUserServ(NgoUserService userServ) {
+    this.userServ = userServ;
+  }
 }

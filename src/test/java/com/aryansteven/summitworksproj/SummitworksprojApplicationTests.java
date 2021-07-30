@@ -1,6 +1,5 @@
 package com.aryansteven.summitworksproj;
 
-import com.aryansteven.summitworksproj.controller.TicketController;
 import com.aryansteven.summitworksproj.model.NgoEvent;
 import com.aryansteven.summitworksproj.model.NgoTicket;
 import com.aryansteven.summitworksproj.model.NgoUser;
@@ -15,45 +14,43 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class SummitworksprojApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+  @Test
+  void contextLoads() {
+  }
 
+  NgoTicketService ticketserv;
 
-	NgoTicketService ticketserv;
-	
-	NgoEventService eventserv;
-	
-	NgoUserService userserv;
-	@Test
-	void testAddTicket()
-	{
+  NgoEventService eventserv;
 
-		NgoEvent event = new NgoEvent().name("Volleyball");
-		
-		NgoUser user = new NgoUser().first_name("Aryan").email("aryan@mail.com").password("password123");
-		eventserv.addEvent(event);
-		userserv.addUser(user);
+  NgoUserService userserv;
 
-		NgoTicket ticket = new NgoTicket().first_name("Aryan").user(user).event(event);
+  @Test
+  void testAddTicket() {
 
+    NgoEvent event = new NgoEvent().name("Volleyball");
 
+    NgoUser user = new NgoUser().first_name("Aryan").email("aryan@mail.com").password("password123");
+    eventserv.addEvent(event);
+    userserv.addUser(user);
 
-		ticketserv.addTicket(ticket);
+    NgoTicket ticket = new NgoTicket().first_name("Aryan").user(user).event(event);
 
-		
-	}
-	@Autowired
-	public void setEventserv(NgoEventService eventserv) {
-		this.eventserv = eventserv;
-	}
-	@Autowired
-	public void setUserserv(NgoUserService userserv) {
-		this.userserv = userserv;
-	}
-	@Autowired
-	public void setTicketserv(NgoTicketService ticketserv) {
-		this.ticketserv = ticketserv;
-	}
+    ticketserv.addTicket(ticket);
+  }
+
+  @Autowired
+  public void setEventserv(NgoEventService eventserv) {
+    this.eventserv = eventserv;
+  }
+
+  @Autowired
+  public void setUserserv(NgoUserService userserv) {
+    this.userserv = userserv;
+  }
+
+  @Autowired
+  public void setTicketserv(NgoTicketService ticketserv) {
+    this.ticketserv = ticketserv;
+  }
 
 }

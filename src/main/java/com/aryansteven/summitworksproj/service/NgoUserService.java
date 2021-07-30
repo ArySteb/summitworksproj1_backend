@@ -8,6 +8,7 @@ import com.aryansteven.summitworksproj.model.NgoUser;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface NgoUserService extends UserDetailsService{
+  
   public List<NgoUser> getAll();
 
   public Optional<NgoUser> getById(Integer id);
@@ -17,4 +18,9 @@ public interface NgoUserService extends UserDetailsService{
   public Optional<NgoUser> updateUser(NgoUser user, Integer id);
 
   public void delUserById(Integer id);
+
+  public Optional<NgoUser> getByEmail(String email);
+
+  
+
 }

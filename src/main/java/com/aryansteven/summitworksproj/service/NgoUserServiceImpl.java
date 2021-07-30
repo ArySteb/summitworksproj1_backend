@@ -12,11 +12,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class NgoUserServiceImpl implements NgoUserService {
   NgoUserRepo userRepo;
+
+  BCryptPasswordEncoder passwordEncoder;
 
   @Override
   public List<NgoUser> getAll() {
@@ -30,7 +33,7 @@ public class NgoUserServiceImpl implements NgoUserService {
 
   @Override
   public NgoUser addUser(NgoUser user) {
-    return userRepo.save(user.id(null));
+    return userRepo.save(user.id(null).password(passwordEncoder.encode(user.getPassword())));
   }
 
   @Override
@@ -41,6 +44,10 @@ public class NgoUserServiceImpl implements NgoUserService {
   @Override
   public void delUserById(Integer id) {
     userRepo.findById(id).ifPresent(userRepo::delete);
+  }
+
+  public Optional<NgoUser> getByEmail(String email){
+      return userRepo.findByEmail(email);
   }
 
   @Autowired
@@ -57,8 +64,10 @@ public class NgoUserServiceImpl implements NgoUserService {
     NgoUser user = this.userRepo.findByEmail(email).orElseThrow(()->new UsernameNotFoundException("User not found"));
 
     return new User(user.getEmail(), user.getPassword(), Arrays.asList(new SimpleGrantedAuthority("role_admin")));
-    
+  }
 
-    
+  @Autowired
+  public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
+       this.passwordEncoder = passwordEncoder;
   }
 }

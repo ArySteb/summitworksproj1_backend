@@ -31,7 +31,7 @@ class SummitworksprojApplicationTests {
 
 		NgoEvent event = new NgoEvent().name("Volleyball");
 		
-		NgoUser user = new NgoUser().first_name("Aryan");
+		NgoUser user = new NgoUser().first_name("Aryan").email("aryan@mail.com").password("password123");
 		eventserv.addEvent(event);
 		userserv.addUser(user);
 

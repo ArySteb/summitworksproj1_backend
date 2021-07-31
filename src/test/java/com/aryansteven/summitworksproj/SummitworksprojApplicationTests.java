@@ -1,5 +1,7 @@
 package com.aryansteven.summitworksproj;
 
+import javax.transaction.Transactional;
+
 import com.aryansteven.summitworksproj.model.NgoEvent;
 import com.aryansteven.summitworksproj.model.NgoTicket;
 import com.aryansteven.summitworksproj.model.NgoUser;
@@ -10,6 +12,7 @@ import com.aryansteven.summitworksproj.service.NgoUserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 
 @SpringBootTest
 class SummitworksprojApplicationTests {
@@ -25,6 +28,8 @@ class SummitworksprojApplicationTests {
   NgoUserService userserv;
 
   @Test
+  @Transactional
+  @Rollback(value = true)
   void testAddTicket() {
 
     NgoEvent event = new NgoEvent().name("Volleyball");

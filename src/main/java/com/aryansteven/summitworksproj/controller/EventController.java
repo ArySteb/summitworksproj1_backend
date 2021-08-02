@@ -17,16 +17,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 public class EventController {
 
     NgoEventService eventServ;
 
+    @ApiOperation(value = "/events", tags = "Event Controller", notes = "Get all Events")
     @GetMapping("/events")
     List<NgoEvent> getAll() {
         return eventServ.getAll();
     }
 
+    @ApiOperation(value = "/events/{id}", tags = "Event Controller", notes = "Get a specific Event")
     @GetMapping("/events/{id}")
     NgoEvent getEvent(@PathVariable Integer id) {
         Optional<NgoEvent> result = eventServ.getById(id);
@@ -38,11 +42,13 @@ public class EventController {
 
     }
 
+    @ApiOperation(value = "/events/{id}", tags = "Event Controller", notes = "Post an Event")
     @PostMapping("/events")
     NgoEvent postEvent(@RequestBody NgoEvent newEvent) {
         return eventServ.addEvent(newEvent);
     }
 
+    @ApiOperation(value = "/events/{id}", tags = "Event Controller", notes = "Put a specific Event")
     @PutMapping("/events/{id}")
     Optional<NgoEvent> putEvent(@RequestBody NgoEvent event, @PathVariable Integer id) {
 
@@ -50,6 +56,7 @@ public class EventController {
 
     }
 
+    @ApiOperation(value = "/events/{id}", tags = "Event Controller", notes = "Delete a specific Event")
     @DeleteMapping("/events/{id}")
     void deleteEvent(@PathVariable Integer id) {
         eventServ.delEventById(id);

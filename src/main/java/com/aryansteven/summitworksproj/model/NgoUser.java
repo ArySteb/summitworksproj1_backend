@@ -12,28 +12,39 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+@ApiModel(description = "User Model")
 @Entity
 @Table(name = "user")
 public class NgoUser implements Serializable {
+  
+  @ApiModelProperty(notes = "ID of the User", name = "id")
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Integer id;
 
+  @ApiModelProperty(notes = "First Name of the User ", name = "first_name")
   @Column(name = "first_name")
   private String first_name;
 
+  @ApiModelProperty(notes = "Last Name of the User ", name = "last_name")
   @Column(name = "last_name")
   private String last_name;
 
+  @ApiModelProperty(notes = "Email of the User", name = "email", required = true)
   @Column(name = "email", unique = true)
   private String email;
 
+  @ApiModelProperty(notes = "Password of the User", name = "password", required = true)
   @Column(name = "password")
   private String password;
 
+  @ApiModelProperty(notes = "Role of the User", name = "role")
   @Column(name = "role")
   private String role;
 
+  @ApiModelProperty(notes = "Tickets of the User", name = "tickets")
   @OneToMany(mappedBy = "user")
   private Set<NgoTicket> tickets;
 

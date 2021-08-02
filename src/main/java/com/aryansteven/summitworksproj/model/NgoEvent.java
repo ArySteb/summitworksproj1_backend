@@ -15,46 +15,65 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(description = "Event Model")
 @Entity
 @Table(name = "event")
 public class NgoEvent implements Serializable {
+  
+  @ApiModelProperty(notes = "ID of the Event")
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
+  @ApiModelProperty(notes = "Name of Event")
   @Column(name = "event_name", length = 50, unique = false)
   private String name;
 
+  @ApiModelProperty(notes = "Description of the Event")
   @Column(name = "event_description", length = 300)
   private String desc;
 
+  @ApiModelProperty(notes = "Category for the Events")
   @Column(name = "category", length = 10)
   private String category;
 
+  
+  @ApiModelProperty(notes = "Starting Date of the Event")
   @Column(name = "start_date")
   private LocalDate start_date;
 
+  @ApiModelProperty(notes = "End Date of the Event")
   @Column(name = "end_date")
   private LocalDate end_date;
 
+  @ApiModelProperty(notes = "Start Time of the Event")
   @Column(name = "start_time")
   private LocalTime start_time;
 
+  @ApiModelProperty(notes = "End Time of the Event")
   @Column(name = "end_time")
   private LocalTime end_time;
 
+  @ApiModelProperty(notes = "Whether Registration is allowed")
   @Column(name = "allow_reg")
   private boolean allow_reg;
 
+  @ApiModelProperty(notes = "Image URL of the Event")
   @Column(name = "img_url")
   private String img_url;
 
+  @ApiModelProperty(notes = "Adult price of the Event")
   @Column(name = "adult_price")
   private Integer adult_price;
 
+  @ApiModelProperty(notes = "Child price of the Event")
   @Column(name = "child_price")
   private Integer child_price;
 
+  @ApiModelProperty(notes = "The Tickets pertaining to the Events")
   @OneToMany(mappedBy = "event")
   private Set<NgoTicket> tickets;
 

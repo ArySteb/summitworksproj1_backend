@@ -17,43 +17,54 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import io.swagger.annotations.ApiOperation;
+
+
 @RestController
 public class UserController {
-  NgoUserService userServ;
 
-  @GetMapping("/users")
-  List<NgoUser> getAll() {
-    return userServ.getAll();
-  }
+    NgoUserService userServ;
 
-  @PostMapping("/users")
-  NgoUser postUser(@RequestBody NgoUser newUser) {
-    return userServ.addUser(newUser);
-  }
-
-  @GetMapping("/users/{id}")
-  NgoUser getUser(@PathVariable Integer id) {
-    Optional<NgoUser> result = userServ.getById(id);
-    if (result.isPresent()) {
-      return result.get();
-    } else {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The user wasn't found");
+    @ApiOperation(value = "/users", tags = "User Controller", notes = "Getting all Users")
+    @GetMapping("/users")
+    List<NgoUser> getAll() {
+        return userServ.getAll();
     }
 
-  }
+    @ApiOperation(value = "/users", tags = "User Controller", notes = "Posting a new User")
+    @PostMapping("/users")
+    NgoUser postUser(@RequestBody NgoUser newUser) {
+        return userServ.addUser(newUser);
+    }
 
-  @PutMapping("/users/{id}")
-  Optional<NgoUser> putUser(@RequestBody NgoUser user, @PathVariable Integer id) {
-    return userServ.updateUser(user, id);
-  }
+    @ApiOperation(value = "/users/{id}", tags = "User Controller", notes = "Getting a specific User")
+    @GetMapping("/users/{id}")
+    NgoUser getUser(@PathVariable Integer id) {
+        Optional<NgoUser> result = userServ.getById(id);
+        if (result.isPresent()) {
+            return result.get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The user wasn't found");
+        }
 
-  @DeleteMapping("/users/{id}")
-  void deleteUser(@PathVariable Integer id) {
-    userServ.delUserById(id);
-  }
+    }
 
-  @Autowired
-  public void setUserServ(NgoUserService userServ) {
-    this.userServ = userServ;
-  }
+    @ApiOperation(value = "/users/{id}", tags = "User Controller", notes = "Putting a specific User")
+    @PutMapping("/users/{id}")
+    Optional<NgoUser> putUser(@RequestBody NgoUser user, @PathVariable Integer id) {
+
+        return userServ.updateUser(user, id);
+
+    }
+
+    @ApiOperation(value = "/users/{id}", tags = "User Controller", notes = "Deleting a User")
+    @DeleteMapping("/users/{id}")
+    void deleteUser(@PathVariable Integer id) {
+        userServ.delUserById(id);
+    }
+
+    @Autowired
+    public void setUserServ(NgoUserService userServ) {
+        this.userServ = userServ;
+    }
 }

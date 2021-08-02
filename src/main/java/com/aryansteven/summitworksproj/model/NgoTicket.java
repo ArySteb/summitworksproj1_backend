@@ -12,35 +12,49 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(description = "Ticket Model")
 @Entity
 @Table(name = "ticket")
 public class NgoTicket implements Serializable {
+  
+  @ApiModelProperty(notes = "ID of the Ticket", name = "id")
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Integer id;
 
+  @ApiModelProperty(notes = "Name of the ticket", name = "first_name")
   @Column(name = "first_name")
   private String first_name;
 
+  @ApiModelProperty(notes = "Email of the Ticket holder", name = "email")
   @Column(name = "email")
   private String email;
 
+  @ApiModelProperty(notes = "Contact number of the Ticket", name = "contact_number")
   @Column(name = "contact_number")
   private Integer contact_number;
 
+  @ApiModelProperty(notes = "Address of the Ticket")
   @Column(name = "address")
   private String address;
 
+  @ApiModelProperty(notes = "Adult Quantity of the Ticket")
   @Column(name = "adult_qty")
   private Integer adult_qty;
 
+  @ApiModelProperty(notes = "Child Quantity of the Ticket")
   @Column(name = "child_qty")
   private Integer child_qty;
 
+  @ApiModelProperty(notes = "Event ID pertaining to the Ticket")
   @ManyToOne
   @JoinColumn(name = "event_id", nullable = false)
   private NgoEvent event;
 
+  @ApiModelProperty(notes = "User ID pertaining to the Ticket")
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
   private NgoUser user;

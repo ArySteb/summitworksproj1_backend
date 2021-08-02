@@ -17,20 +17,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 public class TicketController {
     NgoTicketService ticketServ;
 
+    @ApiOperation(value = "/tickets", tags = "Ticket Controller", notes = "Get all Tickets")
     @GetMapping("/tickets")
     List<NgoTicket> getAll() {
         return ticketServ.getAll();
     }
 
+    @ApiOperation(value = "/tickets", tags = "Ticket Controller", notes = "Post a Ticket")
     @PostMapping("/tickets")
     NgoTicket postTicket(@RequestBody NgoTicket newTicket) {
         return ticketServ.addTicket(newTicket);
     }
 
+    @ApiOperation(value = "/tickets/{id}", tags = "Ticket Controller", notes = "Get a specific Ticket")
     @GetMapping("/tickets/{id}")
     NgoTicket getTicket(@PathVariable Integer id) {
         Optional<NgoTicket> result = ticketServ.getById(id);
@@ -42,6 +47,7 @@ public class TicketController {
 
     }
 
+    @ApiOperation(value = "/tickets/{id}", tags = "Ticket Controller", notes = "Put a specific Ticket")
     @PutMapping("/tickets/{id}")
     Optional<NgoTicket> putTicket(@RequestBody NgoTicket ticket, @PathVariable Integer id) {
 
@@ -49,6 +55,7 @@ public class TicketController {
 
     }
 
+    @ApiOperation(value = "/tickets/{id}", tags = "Ticket Controller", notes = "Delete a Ticket")
     @DeleteMapping("/tickets/{id}")
     void deleteTicket(@PathVariable Integer id) {
         ticketServ.delTicketById(id);

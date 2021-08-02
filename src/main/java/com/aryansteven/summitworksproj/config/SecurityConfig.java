@@ -8,7 +8,7 @@ import org.springframework.security.authentication.dao.*;
 import org.springframework.security.config.annotation.authentication.builders.*;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.*;
-
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 // import org.springframework.web.cors.CorsConfiguration;
 // import org.springframework.web.cors.CorsConfigurationSource;
@@ -42,7 +42,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.csrf().disable().authorizeRequests().anyRequest().anonymous().and();
+    http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+        .authorizeRequests().anyRequest().anonymous().and();
+    // TODO: make a filter that takes authcookie and puts it in auth header.
+    
     // .antMatchers(HttpMethod.DELETE, "/users/*",
     // "/events/*").hasAnyAuthority("ADMIN")
     // .antMatchers(HttpMethod.POST, "/users", "/events").hasAnyAuthority("ADMIN")

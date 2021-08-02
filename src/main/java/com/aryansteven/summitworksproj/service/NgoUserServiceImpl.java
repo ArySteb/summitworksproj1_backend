@@ -63,7 +63,8 @@ public class NgoUserServiceImpl implements NgoUserService {
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     NgoUser user = this.userRepo.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-    return new User(user.getEmail(), user.getPassword(), Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN")));
+    return new User(user.getEmail(), user.getPassword(),
+        Arrays.asList(new SimpleGrantedAuthority("ROLE_" + user.getRole().toUpperCase())));
   }
 
   @Autowired

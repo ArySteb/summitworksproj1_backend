@@ -44,9 +44,7 @@ public class UserController {
 
   @PutMapping("/users/{id}")
   Optional<NgoUser> putUser(@RequestBody NgoUser user, @PathVariable Integer id) {
-
     return userServ.updateUser(user, id);
-
   }
 
   @DeleteMapping("/users/{id}")

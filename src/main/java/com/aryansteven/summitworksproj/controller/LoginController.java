@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import com.aryansteven.summitworksproj.model.NgoUser;
 import com.aryansteven.summitworksproj.service.NgoUserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +20,36 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 public class LoginController {
 
   NgoUserService userService;
   BCryptPasswordEncoder passwordEncoder;
+
+  @GetMapping("/session")
+  NgoUser getProfile(final HttpServletRequest request) {
+    Cookie[] cookies = request.getCookies();
+
+    if (cookies == null) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    }
+
+    for (Cookie c : cookies) {
+      if (c.getName().equalsIgnoreCase("ngo_authtoken")) {
+        String email = new String(Base64.getDecoder().decode(c.getValue())).split(":")[0];
+
+        return userService.getByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))
+            .password(null);
+      }
+    }
+    throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+  }
 
   @PostMapping("/session")
   void login(@RequestBody @Valid Credentials credentials, final HttpServletResponse response,
@@ -41,9 +63,10 @@ public class LoginController {
       isCorrect = false;
     }
     if (!isCorrect) {
-      response.setStatus(HttpStatus.UNAUTHORIZED.value());
-      response.setHeader(HttpHeaders.WWW_AUTHENTICATE, "Basic realm=\"User Visible Realm\"");
-      return;
+      // response.setStatus(HttpStatus.UNAUTHORIZED.value());
+      // response.setHeader(HttpHeaders.WWW_AUTHENTICATE, "Basic realm=\"User Visible
+      // Realm\"");
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong username!");
     }
 
     String encodedCredentials = Base64.getEncoder()

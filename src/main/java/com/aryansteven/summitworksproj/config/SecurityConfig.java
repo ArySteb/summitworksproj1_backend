@@ -1,9 +1,14 @@
 package com.aryansteven.summitworksproj.config;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.aryansteven.summitworksproj.service.NgoUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 // import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.*;
@@ -13,7 +18,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.*;
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @EnableWebSecurity
@@ -45,13 +52,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.authorizeRequests(ar -> ar.antMatchers(HttpMethod.POST, "/session").anonymous()
-        .antMatchers(HttpMethod.POST, "/users", "/tickets").hasAnyAuthority("USER", "ADMIN")
-        .antMatchers(HttpMethod.POST, "/events").hasAuthority("ADMIN").antMatchers(HttpMethod.GET, "/events/**")
-        .hasAnyAuthority("USER", "ADMIN").antMatchers(HttpMethod.GET, "/users/**", "/tickets/**")
-        .hasAnyAuthority("ADMIN").antMatchers(HttpMethod.DELETE, "/session").hasAnyAuthority("USER", "ADMIN")
-        .antMatchers(HttpMethod.DELETE, "/users/*", "/events/*").hasAnyAuthority("ADMIN")
-        .antMatchers(HttpMethod.PUT, "/users/*", "/events/*").hasAuthority("ADMIN")).httpBasic(withDefaults)
+    http.authorizeRequests(
+        ar -> ar.antMatchers(HttpMethod.POST, "/session").anonymous().antMatchers(HttpMethod.POST, "/users", "/tickets")
+            .hasAnyAuthority("USER", "ADMIN").antMatchers(HttpMethod.POST, "/events").hasAuthority("ADMIN")
+            .antMatchers(HttpMethod.GET, "/events/**", "/session").hasAnyAuthority("USER", "ADMIN")
+            .antMatchers(HttpMethod.GET, "/users/**", "/tickets/**").hasAnyAuthority("ADMIN")
+            .antMatchers(HttpMethod.DELETE, "/session").hasAnyAuthority("USER", "ADMIN")
+            .antMatchers(HttpMethod.DELETE, "/users/*", "/events/*").hasAnyAuthority("ADMIN")
+            .antMatchers(HttpMethod.PUT, "/users/*", "/events/*").hasAuthority("ADMIN"))
+        .httpBasic(h -> h.authenticationEntryPoint(new NoPopupBasicAuthenticationEntryPoint()))
         .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).csrf(c -> c.disable())
         .exceptionHandling(e -> e.accessDeniedPage("/403"));
 
@@ -63,4 +72,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     this.userServ = userServ;
   }
 
+}
+
+class NoPopupBasicAuthenticationEntryPoint implements AuthenticationEntryPoint {
+  @Override
+  public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
+      throws IOException, ServletException {
+    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
+  }
 }

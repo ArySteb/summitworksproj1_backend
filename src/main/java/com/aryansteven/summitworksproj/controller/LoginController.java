@@ -2,6 +2,9 @@ package com.aryansteven.summitworksproj.controller;
 
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +18,7 @@ import com.aryansteven.summitworksproj.service.NgoUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,19 +37,31 @@ public class LoginController {
   BCryptPasswordEncoder passwordEncoder;
 
   @GetMapping("/session")
-  NgoUser getProfile(final HttpServletRequest request) {
+  ResponseEntity<?> getProfile(final HttpServletRequest request) {
     Cookie[] cookies = request.getCookies();
 
     if (cookies == null) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "no cookie");
     }
 
     for (Cookie c : cookies) {
-      if (c.getName().equalsIgnoreCase("ngo_authtoken")) {
-        String email = new String(Base64.getDecoder().decode(c.getValue())).split(":")[0];
+      if (c.getName().equals("ngo_authtoken")) {
+        String[] cred = new String(Base64.getDecoder().decode(c.getValue())).split(":");
 
-        return userService.getByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))
-            .password(null);
+        // System.out.println("cvalue " + c.getValue());
+        // for (String s : cred) {
+        // System.out.println("cred " + s);
+        // }
+
+        String email = cred[0];
+        if (email.equals("admin")) {
+          return ResponseEntity.ok(new NgoUser().email("admin").role("ADMIN"));
+        }
+
+        Optional<NgoUser> userOptional = userService.getByEmail(email).map(u -> u.password(null));
+        if (userOptional.isPresent()) {
+          return ResponseEntity.ok(userOptional.get());
+        }
       }
     }
     throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -66,13 +82,13 @@ public class LoginController {
       // response.setStatus(HttpStatus.UNAUTHORIZED.value());
       // response.setHeader(HttpHeaders.WWW_AUTHENTICATE, "Basic realm=\"User Visible
       // Realm\"");
+      // return;
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong username!");
     }
 
     String encodedCredentials = Base64.getEncoder()
         .encodeToString((credentials.getEmail() + ":" + credentials.getPassword()).getBytes());
 
-    // System.out.println(request.getHeader("Authorization"));
     Cookie authCookie = new Cookie("ngo_authtoken", encodedCredentials);
     authCookie.setPath("/");
     authCookie.setHttpOnly(true);

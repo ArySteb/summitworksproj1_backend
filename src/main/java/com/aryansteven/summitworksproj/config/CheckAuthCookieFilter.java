@@ -24,17 +24,23 @@ public class CheckAuthCookieFilter extends OncePerRequestFilter {
     MutableHttpServletRequest mutableRequest = new MutableHttpServletRequest(request);
 
     Cookie[] cookies = request.getCookies();
+    boolean headerPut = false;
 
     if (cookies != null) {
       // System.out.println("whaa");
       for (Cookie cookie : cookies) {
         // System.out.println(cookie.getName() + ":" + cookie.getValue());
-        if (cookie.getName().equalsIgnoreCase("ngo_authtoken")) {
+        if (cookie.getName().equals("ngo_authtoken")) {
           mutableRequest.putHeader("Authorization", "Basic " + cookie.getValue());
+          headerPut = true;
         }
       }
     } else {
       // System.out.println("no cookies");
+    }
+    if (!headerPut) {
+      mutableRequest.removeHeader("Authorization");
+      System.out.println("whyyy");
     }
     chain.doFilter(mutableRequest, response);
   }

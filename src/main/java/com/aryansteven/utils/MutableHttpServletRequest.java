@@ -11,18 +11,28 @@ import javax.servlet.http.HttpServletRequestWrapper;
 public final class MutableHttpServletRequest extends HttpServletRequestWrapper {
   // holds custom header and value mapping
   private final Map<String, String> customHeaders;
+  private final Set<String> removedHeaders;
 
   public MutableHttpServletRequest(HttpServletRequest request) {
     super(request);
     this.customHeaders = new HashMap<String, String>();
+    this.removedHeaders = new HashSet<>();
   }
 
   public void putHeader(String name, String value) {
     this.customHeaders.put(name, value);
   }
 
+  public void removeHeader(String name) {
+    this.customHeaders.remove(name);
+    this.removedHeaders.add(name);
+  }
+
   public String getHeader(String name) {
     // check the custom headers first
+    if (removedHeaders.contains(name)) {
+      return null;
+    }
     String headerValue = customHeaders.get(name);
 
     if (headerValue != null) {
@@ -44,6 +54,7 @@ public final class MutableHttpServletRequest extends HttpServletRequestWrapper {
       set.add(n);
     }
 
+    set.removeAll(removedHeaders);
     // create an enumeration from the set and return
     return Collections.enumeration(set);
   }

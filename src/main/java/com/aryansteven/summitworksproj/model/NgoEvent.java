@@ -15,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -22,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
 @Entity
 @Table(name = "event")
 public class NgoEvent implements Serializable {
-  
+
   @ApiModelProperty(notes = "ID of the Event")
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +42,6 @@ public class NgoEvent implements Serializable {
   @Column(name = "category", length = 10)
   private String category;
 
-  
   @ApiModelProperty(notes = "Starting Date of the Event")
   @Column(name = "start_date")
   private LocalDate start_date;
@@ -73,7 +74,12 @@ public class NgoEvent implements Serializable {
   @Column(name = "child_price")
   private Integer child_price;
 
+  @ApiModelProperty(notes = "Location of the Event")
+  @Column(name = "location")
+  private String location;
+
   @ApiModelProperty(notes = "The Tickets pertaining to the Events")
+  @JsonIgnore
   @OneToMany(mappedBy = "event")
   private Set<NgoTicket> tickets;
 
@@ -82,7 +88,7 @@ public class NgoEvent implements Serializable {
 
   public NgoEvent(Integer id, String name, String desc, String category, LocalDate start_date, LocalDate end_date,
       LocalTime start_time, LocalTime end_time, boolean allow_reg, String img_url, Integer adult_price,
-      Integer child_price) {
+      Integer child_price, String location, Set<NgoTicket> tickets) {
     this.id = id;
     this.name = name;
     this.desc = desc;
@@ -95,6 +101,8 @@ public class NgoEvent implements Serializable {
     this.img_url = img_url;
     this.adult_price = adult_price;
     this.child_price = child_price;
+    this.location = location;
+    this.tickets = tickets;
   }
 
   public Integer getId() {
@@ -197,6 +205,22 @@ public class NgoEvent implements Serializable {
     this.child_price = child_price;
   }
 
+  public String getLocation() {
+    return this.location;
+  }
+
+  public void setLocation(String location) {
+    this.location = location;
+  }
+
+  public Set<NgoTicket> getTickets() {
+    return this.tickets;
+  }
+
+  public void setTickets(Set<NgoTicket> tickets) {
+    this.tickets = tickets;
+  }
+
   public NgoEvent id(Integer id) {
     setId(id);
     return this;
@@ -257,6 +281,16 @@ public class NgoEvent implements Serializable {
     return this;
   }
 
+  public NgoEvent location(String location) {
+    setLocation(location);
+    return this;
+  }
+
+  public NgoEvent tickets(Set<NgoTicket> tickets) {
+    setTickets(tickets);
+    return this;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (o == this)
@@ -270,13 +304,14 @@ public class NgoEvent implements Serializable {
         && Objects.equals(end_date, ngoEvent.end_date) && Objects.equals(start_time, ngoEvent.start_time)
         && Objects.equals(end_time, ngoEvent.end_time) && allow_reg == ngoEvent.allow_reg
         && Objects.equals(img_url, ngoEvent.img_url) && Objects.equals(adult_price, ngoEvent.adult_price)
-        && Objects.equals(child_price, ngoEvent.child_price);
+        && Objects.equals(child_price, ngoEvent.child_price) && Objects.equals(location, ngoEvent.location)
+        && Objects.equals(tickets, ngoEvent.tickets);
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(id, name, desc, category, start_date, end_date, start_time, end_time, allow_reg, img_url,
-        adult_price, child_price);
+        adult_price, child_price, location, tickets);
   }
 
   @Override
@@ -285,7 +320,8 @@ public class NgoEvent implements Serializable {
         + getCategory() + "'" + ", start_date='" + getStart_date() + "'" + ", end_date='" + getEnd_date() + "'"
         + ", start_time='" + getStart_time() + "'" + ", end_time='" + getEnd_time() + "'" + ", allow_reg='"
         + isAllow_reg() + "'" + ", img_url='" + getImg_url() + "'" + ", adult_price='" + getAdult_price() + "'"
-        + ", child_price='" + getChild_price() + "'" + "}";
+        + ", child_price='" + getChild_price() + "'" + ", location='" + getLocation() + "'" + ", tickets='"
+        + getTickets() + "'" + "}";
   }
 
 }

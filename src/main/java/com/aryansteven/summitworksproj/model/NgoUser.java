@@ -12,13 +12,16 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
 @ApiModel(description = "User Model")
 @Entity
 @Table(name = "user")
 public class NgoUser implements Serializable {
-  
+
   @ApiModelProperty(notes = "ID of the User", name = "id")
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,6 +48,7 @@ public class NgoUser implements Serializable {
   private String role;
 
   @ApiModelProperty(notes = "Tickets of the User", name = "tickets")
+  @JsonIgnore
   @OneToMany(mappedBy = "user")
   private Set<NgoTicket> tickets;
 

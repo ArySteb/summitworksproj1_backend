@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -54,11 +56,13 @@ public class NgoTicket implements Serializable {
   private Integer child_qty;
 
   @ApiModelProperty(notes = "Event ID pertaining to the Ticket")
+  @JsonBackReference
   @ManyToOne
   @JoinColumn(name = "event_id", nullable = false)
   private NgoEvent event;
 
   @ApiModelProperty(notes = "User ID pertaining to the Ticket")
+  @JsonBackReference
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
   private NgoUser user;

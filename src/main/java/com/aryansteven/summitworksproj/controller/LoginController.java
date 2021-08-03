@@ -79,10 +79,6 @@ public class LoginController {
       isCorrect = false;
     }
     if (!isCorrect) {
-      // response.setStatus(HttpStatus.UNAUTHORIZED.value());
-      // response.setHeader(HttpHeaders.WWW_AUTHENTICATE, "Basic realm=\"User Visible
-      // Realm\"");
-      // return;
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong username!");
     }
 
@@ -97,12 +93,12 @@ public class LoginController {
 
   @DeleteMapping("/session")
   void logout(final HttpServletRequest request, final HttpServletResponse response) {
-    Arrays.asList(request.getCookies()).stream().filter(c -> c.getName().equalsIgnoreCase("ngo_authtoken")).findAny()
-        .ifPresent(c -> {
-          c.setMaxAge(-1);
-          c.setValue("");
-          response.addCookie(c);
-        });
+    Cookie cookie = new Cookie("ngo_authtoken", null);
+    cookie.setMaxAge(0);
+    cookie.setHttpOnly(true);
+    cookie.setPath("/");
+
+    response.addCookie(cookie);
   }
 
   @Autowired

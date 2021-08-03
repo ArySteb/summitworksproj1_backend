@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests(
-        ar -> ar.antMatchers(HttpMethod.POST, "/session").anonymous().antMatchers(HttpMethod.POST, "/users", "/tickets")
+        ar -> ar.antMatchers(HttpMethod.POST, "/session").permitAll().antMatchers(HttpMethod.POST, "/users", "/tickets")
             .hasAnyAuthority("USER", "ADMIN").antMatchers(HttpMethod.POST, "/events").hasAuthority("ADMIN")
             .antMatchers(HttpMethod.GET, "/events/**", "/session").hasAnyAuthority("USER", "ADMIN")
             .antMatchers(HttpMethod.GET, "/users/**", "/tickets/**").hasAnyAuthority("ADMIN")

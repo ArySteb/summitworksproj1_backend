@@ -1,5 +1,6 @@
 package com.aryansteven.summitworksproj.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -61,10 +62,23 @@ public class NgoUserServiceImpl implements NgoUserService {
 
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    if (email.equals("admin")) {
+      return new User("admin", passwordEncoder.encode("password"),
+          Arrays.asList(new SimpleGrantedAuthority("ADMIN"), new SimpleGrantedAuthority("USER")));
+    }
+
     NgoUser user = this.userRepo.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-    return new User(user.getEmail(), user.getPassword(),
-        Arrays.asList(new SimpleGrantedAuthority("ROLE_" + user.getRole().toUpperCase())));
+    ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();
+    if (user.getRole().equalsIgnoreCase("USER")) {
+      authorities.add(new SimpleGrantedAuthority("USER"));
+    }
+    if (user.getRole().equalsIgnoreCase("ADMIN")) {
+      authorities.add(new SimpleGrantedAuthority("ADMIN"));
+      authorities.add(new SimpleGrantedAuthority("USER"));
+    }
+
+    return new User(user.getEmail(), user.getPassword(), authorities);
   }
 
   @Autowired

@@ -19,15 +19,19 @@ import io.swagger.annotations.ApiModelProperty;
 @Entity
 @Table(name = "ticket")
 public class NgoTicket implements Serializable {
-  
+
   @ApiModelProperty(notes = "ID of the Ticket", name = "id")
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Integer id;
 
-  @ApiModelProperty(notes = "Name of the ticket", name = "first_name")
+  @ApiModelProperty(notes = "First name of the ticket holder", name = "first_name")
   @Column(name = "first_name")
   private String first_name;
+
+  @ApiModelProperty(notes = "Last name of the ticket holder", name = "first_name")
+  @Column(name = "last_name")
+  private String last_name;
 
   @ApiModelProperty(notes = "Email of the Ticket holder", name = "email")
   @Column(name = "email")
@@ -62,17 +66,18 @@ public class NgoTicket implements Serializable {
   public NgoTicket() {
   }
 
-  public NgoTicket(Integer id, NgoEvent event, NgoUser user, String first_name, String email, Integer contact_number,
-      String address, Integer adult_qty, Integer child_qty) {
+  public NgoTicket(Integer id, String first_name, String last_name, String email, Integer contact_number,
+      String address, Integer adult_qty, Integer child_qty, NgoEvent event, NgoUser user) {
     this.id = id;
-    this.event = event;
-    this.user = user;
     this.first_name = first_name;
+    this.last_name = last_name;
     this.email = email;
     this.contact_number = contact_number;
     this.address = address;
     this.adult_qty = adult_qty;
     this.child_qty = child_qty;
+    this.event = event;
+    this.user = user;
   }
 
   public Integer getId() {
@@ -83,28 +88,20 @@ public class NgoTicket implements Serializable {
     this.id = id;
   }
 
-  public NgoEvent getEvent() {
-    return this.event;
-  }
-
-  public void setEvent(NgoEvent event) {
-    this.event = event;
-  }
-
-  public NgoUser getUser() {
-    return this.user;
-  }
-
-  public void setUser(NgoUser user) {
-    this.user = user;
-  }
-
   public String getFirst_name() {
     return this.first_name;
   }
 
   public void setFirst_name(String first_name) {
     this.first_name = first_name;
+  }
+
+  public String getLast_name() {
+    return this.last_name;
+  }
+
+  public void setLast_name(String last_name) {
+    this.last_name = last_name;
   }
 
   public String getEmail() {
@@ -147,23 +144,34 @@ public class NgoTicket implements Serializable {
     this.child_qty = child_qty;
   }
 
+  public NgoEvent getEvent() {
+    return this.event;
+  }
+
+  public void setEvent(NgoEvent event) {
+    this.event = event;
+  }
+
+  public NgoUser getUser() {
+    return this.user;
+  }
+
+  public void setUser(NgoUser user) {
+    this.user = user;
+  }
+
   public NgoTicket id(Integer id) {
     setId(id);
     return this;
   }
 
-  public NgoTicket event(NgoEvent event) {
-    setEvent(event);
-    return this;
-  }
-
-  public NgoTicket user(NgoUser user) {
-    setUser(user);
-    return this;
-  }
-
   public NgoTicket first_name(String first_name) {
     setFirst_name(first_name);
+    return this;
+  }
+
+  public NgoTicket last_name(String last_name) {
+    setLast_name(last_name);
     return this;
   }
 
@@ -192,6 +200,16 @@ public class NgoTicket implements Serializable {
     return this;
   }
 
+  public NgoTicket event(NgoEvent event) {
+    setEvent(event);
+    return this;
+  }
+
+  public NgoTicket user(NgoUser user) {
+    setUser(user);
+    return this;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (o == this)
@@ -200,24 +218,24 @@ public class NgoTicket implements Serializable {
       return false;
     }
     NgoTicket ngoTicket = (NgoTicket) o;
-    return Objects.equals(id, ngoTicket.id) && Objects.equals(event, ngoTicket.event)
-        && Objects.equals(user, ngoTicket.user) && Objects.equals(first_name, ngoTicket.first_name)
-        && Objects.equals(email, ngoTicket.email) && Objects.equals(contact_number, ngoTicket.contact_number)
-        && Objects.equals(address, ngoTicket.address) && Objects.equals(adult_qty, ngoTicket.adult_qty)
-        && Objects.equals(child_qty, ngoTicket.child_qty);
+    return Objects.equals(id, ngoTicket.id) && Objects.equals(first_name, ngoTicket.first_name)
+        && Objects.equals(last_name, ngoTicket.last_name) && Objects.equals(email, ngoTicket.email)
+        && Objects.equals(contact_number, ngoTicket.contact_number) && Objects.equals(address, ngoTicket.address)
+        && Objects.equals(adult_qty, ngoTicket.adult_qty) && Objects.equals(child_qty, ngoTicket.child_qty)
+        && Objects.equals(event, ngoTicket.event) && Objects.equals(user, ngoTicket.user);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, event, user, first_name, email, contact_number, address, adult_qty, child_qty);
+    return Objects.hash(id, first_name, last_name, email, contact_number, address, adult_qty, child_qty, event, user);
   }
 
   @Override
   public String toString() {
-    return "{" + " id='" + getId() + "'" + ", event='" + getEvent() + "'" + ", user='" + getUser() + "'"
-        + ", first_name='" + getFirst_name() + "'" + ", email='" + getEmail() + "'" + ", contact_number='"
-        + getContact_number() + "'" + ", address='" + getAddress() + "'" + ", adult_qty='" + getAdult_qty() + "'"
-        + ", child_qty='" + getChild_qty() + "'" + "}";
+    return "{" + " id='" + getId() + "'" + ", first_name='" + getFirst_name() + "'" + ", last_name='" + getLast_name()
+        + "'" + ", email='" + getEmail() + "'" + ", contact_number='" + getContact_number() + "'" + ", address='"
+        + getAddress() + "'" + ", adult_qty='" + getAdult_qty() + "'" + ", child_qty='" + getChild_qty() + "'"
+        + ", event='" + getEvent() + "'" + ", user='" + getUser() + "'" + "}";
   }
 
 }

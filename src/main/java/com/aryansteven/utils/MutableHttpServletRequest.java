@@ -1,4 +1,7 @@
 package com.aryansteven.utils;
+//* code imported from this blog:
+
+//* https://wilddiary.com/adding-custom-headers-java-httpservletrequest/
 
 import java.util.*;
 

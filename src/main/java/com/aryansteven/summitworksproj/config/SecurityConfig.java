@@ -3,22 +3,25 @@ package com.aryansteven.summitworksproj.config;
 import com.aryansteven.summitworksproj.service.NgoUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 // import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.*;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.*;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.*;
+import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-// import org.springframework.web.cors.CorsConfiguration;
-// import org.springframework.web.cors.CorsConfigurationSource;
-// import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-@Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   NgoUserService userServ;
+  private Customizer<HttpBasicConfigurer<HttpSecurity>> withDefaults = h -> {
+  };
 
   @Bean
   public BCryptPasswordEncoder passwordEncoder() {
@@ -42,22 +45,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-        .authorizeRequests().anyRequest().anonymous().and();
-    // TODO: make a filter that takes authcookie and puts it in auth header.
-    
-    // .antMatchers(HttpMethod.DELETE, "/users/*",
-    // "/events/*").hasAnyAuthority("ADMIN")
-    // .antMatchers(HttpMethod.POST, "/users", "/events").hasAnyAuthority("ADMIN")
+    http.authorizeRequests(ar -> ar.antMatchers(HttpMethod.POST, "/session").anonymous()
+        .antMatchers(HttpMethod.POST, "/users", "/tickets").hasAnyAuthority("USER", "ADMIN")
+        .antMatchers(HttpMethod.POST, "/events").hasAuthority("ADMIN").antMatchers(HttpMethod.GET, "/events/**")
+        .hasAnyAuthority("USER", "ADMIN").antMatchers(HttpMethod.GET, "/users/**", "/tickets/**")
+        .hasAnyAuthority("ADMIN").antMatchers(HttpMethod.DELETE, "/session").hasAnyAuthority("USER", "ADMIN")
+        .antMatchers(HttpMethod.DELETE, "/users/*", "/events/*").hasAnyAuthority("ADMIN")
+        .antMatchers(HttpMethod.PUT, "/users/*", "/events/*").hasAuthority("ADMIN")).httpBasic(withDefaults)
+        .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).csrf(c -> c.disable())
+        .exceptionHandling(e -> e.accessDeniedPage("/403"));
 
-    // .antMatchers(HttpMethod.PUT, "/users/*",
-    // "/events/*").hasAnyAuthority("ADMIN")
-
-    // .antMatchers(HttpMethod.GET, "/users/*", "/events",
-    // "/events/*").hasAnyAuthority("USER")
-    // .antMatchers(HttpMethod.POST, "/tickets").hasAnyAuthority("USER")
-
-    // .and().formLogin().permitAll().and().logout().permitAll().and().exceptionHandling().accessDeniedPage("/403");
+    http.addFilterBefore(new CheckAuthCookieFilter(), BasicAuthenticationFilter.class);
   }
 
   @Autowired

@@ -3,6 +3,7 @@ package com.aryansteven.summitworksproj.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.aryansteven.summitworksproj.controller.TicketDto;
 import com.aryansteven.summitworksproj.model.NgoTicket;
 
 public interface NgoTicketService {
@@ -15,4 +16,6 @@ public interface NgoTicketService {
   public Optional<NgoTicket> updateTicket(NgoTicket ticket, Integer id);
 
   public void delTicketById(Integer id);
+
+  public NgoTicket convert(TicketDto tDto);
 }

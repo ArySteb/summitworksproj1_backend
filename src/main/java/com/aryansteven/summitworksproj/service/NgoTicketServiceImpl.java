@@ -3,6 +3,7 @@ package com.aryansteven.summitworksproj.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.aryansteven.summitworksproj.controller.TicketDto;
 import com.aryansteven.summitworksproj.model.NgoTicket;
 import com.aryansteven.summitworksproj.repo.NgoTicketRepo;
 
@@ -45,5 +46,10 @@ public class NgoTicketServiceImpl implements NgoTicketService {
 
   public NgoTicketRepo getTicketRepo() {
     return ticketRepo;
+  }
+
+  @Override
+  public NgoTicket convert(TicketDto tDto) {
+    return null;
   }
 }

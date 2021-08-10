@@ -10,13 +10,10 @@ import com.aryansteven.summitworksproj.service.NgoUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.http.HttpMethod;
-// import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.*;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.*;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.*;
-import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,8 +24,6 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   NgoUserService userServ;
-  private Customizer<HttpBasicConfigurer<HttpSecurity>> withDefaults = h -> {
-  };
 
   @Bean
   public BCryptPasswordEncoder passwordEncoder() {

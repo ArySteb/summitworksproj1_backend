@@ -67,6 +67,8 @@ public class LoginController {
       final HttpServletRequest request) {
     boolean isCorrect;
 
+    // System.out.println("credentials are " + credentials);
+
     try {
       UserDetails u = userService.loadUserByUsername(credentials.getEmail());
       isCorrect = passwordEncoder.matches(credentials.getPassword(), u.getPassword());

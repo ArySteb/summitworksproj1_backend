@@ -40,8 +40,8 @@ public class NgoTicket implements Serializable {
   private String email;
 
   @ApiModelProperty(notes = "Contact number of the Ticket", name = "contact_number")
-  @Column(name = "contact_number")
-  private Integer contact_number;
+  @Column(name = "contact_number", length = 15)
+  private String contact_number;
 
   @ApiModelProperty(notes = "Address of the Ticket")
   @Column(name = "address")
@@ -70,8 +70,8 @@ public class NgoTicket implements Serializable {
   public NgoTicket() {
   }
 
-  public NgoTicket(Integer id, String first_name, String last_name, String email, Integer contact_number,
-      String address, Integer adult_qty, Integer child_qty, NgoEvent event, NgoUser user) {
+  public NgoTicket(Integer id, String first_name, String last_name, String email, String contact_number, String address,
+      Integer adult_qty, Integer child_qty, NgoEvent event, NgoUser user) {
     this.id = id;
     this.first_name = first_name;
     this.last_name = last_name;
@@ -116,11 +116,11 @@ public class NgoTicket implements Serializable {
     this.email = email;
   }
 
-  public Integer getContact_number() {
+  public String getContact_number() {
     return this.contact_number;
   }
 
-  public void setContact_number(Integer contact_number) {
+  public void setContact_number(String contact_number) {
     this.contact_number = contact_number;
   }
 
@@ -184,7 +184,7 @@ public class NgoTicket implements Serializable {
     return this;
   }
 
-  public NgoTicket contact_number(Integer contact_number) {
+  public NgoTicket contact_number(String contact_number) {
     setContact_number(contact_number);
     return this;
   }
@@ -239,7 +239,7 @@ public class NgoTicket implements Serializable {
     return "{" + " id='" + getId() + "'" + ", first_name='" + getFirst_name() + "'" + ", last_name='" + getLast_name()
         + "'" + ", email='" + getEmail() + "'" + ", contact_number='" + getContact_number() + "'" + ", address='"
         + getAddress() + "'" + ", adult_qty='" + getAdult_qty() + "'" + ", child_qty='" + getChild_qty() + "'"
-        + ", event='" + getEvent() + "'" + ", user='" + getUser() + "'" + "}";
+        + ", event_id='" + getEvent().getId() + "'" + ", user_id='" + getUser().getId() + "'" + "}";
   }
 
 }

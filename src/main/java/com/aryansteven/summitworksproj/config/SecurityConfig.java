@@ -52,14 +52,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.authorizeRequests(
-        ar -> ar.antMatchers(HttpMethod.POST, "/session").permitAll().antMatchers(HttpMethod.POST, "/users", "/tickets")
-            .hasAnyAuthority("USER", "ADMIN").antMatchers(HttpMethod.POST, "/events").hasAuthority("ADMIN")
-            .antMatchers(HttpMethod.GET, "/events/**", "/session").hasAnyAuthority("USER", "ADMIN")
-            .antMatchers(HttpMethod.GET, "/users/**", "/tickets/**").hasAnyAuthority("ADMIN")
-            .antMatchers(HttpMethod.DELETE, "/session").hasAnyAuthority("USER", "ADMIN")
-            .antMatchers(HttpMethod.DELETE, "/users/*", "/events/*").hasAnyAuthority("ADMIN")
-            .antMatchers(HttpMethod.PUT, "/users/*", "/events/*").hasAuthority("ADMIN"))
+    http.authorizeRequests(ar -> ar.antMatchers(HttpMethod.POST, "/session").permitAll()
+        .antMatchers(HttpMethod.POST, "/users", "/tickets").hasAnyAuthority("USER", "ADMIN")
+        .antMatchers(HttpMethod.POST, "/events").hasAuthority("ADMIN")
+        .antMatchers(HttpMethod.GET, "/events/**", "/session").hasAnyAuthority("USER", "ADMIN")
+        .antMatchers(HttpMethod.GET, "/users/**", "/tickets/**").hasAnyAuthority("ADMIN")
+        .antMatchers(HttpMethod.DELETE, "/session").permitAll().antMatchers(HttpMethod.DELETE, "/users/*", "/events/*")
+        .hasAnyAuthority("ADMIN").antMatchers(HttpMethod.PUT, "/users/*", "/events/*").hasAuthority("ADMIN"))
         .httpBasic(h -> h.authenticationEntryPoint(new NoPopupBasicAuthenticationEntryPoint()))
         .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).csrf(c -> c.disable())
         .exceptionHandling(e -> e.accessDeniedPage("/403"));

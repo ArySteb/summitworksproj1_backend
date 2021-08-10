@@ -9,7 +9,7 @@ public class TicketDto implements Serializable {
   private String first_name;
   private String last_name;
   private String email;
-  private Integer contact_number;
+  private String contact_number;
   private String address;
   private Integer adult_qty;
   private Integer child_qty;
@@ -25,7 +25,7 @@ public class TicketDto implements Serializable {
   public TicketDto() {
   }
 
-  public TicketDto(String first_name, String last_name, String email, Integer contact_number, String address,
+  public TicketDto(String first_name, String last_name, String email, String contact_number, String address,
       Integer adult_qty, Integer child_qty, Integer eventId, Integer userId) {
     this.first_name = first_name;
     this.last_name = last_name;
@@ -62,11 +62,11 @@ public class TicketDto implements Serializable {
     this.email = email;
   }
 
-  public Integer getContact_number() {
+  public String getContact_number() {
     return this.contact_number;
   }
 
-  public void setContact_number(Integer contact_number) {
+  public void setContact_number(String contact_number) {
     this.contact_number = contact_number;
   }
 
@@ -125,7 +125,7 @@ public class TicketDto implements Serializable {
     return this;
   }
 
-  public TicketDto contact_number(Integer contact_number) {
+  public TicketDto contact_number(String contact_number) {
     setContact_number(contact_number);
     return this;
   }

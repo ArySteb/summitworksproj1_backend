@@ -39,7 +39,7 @@ public class NgoEvent implements Serializable {
   private String desc;
 
   @ApiModelProperty(notes = "Category for the Events")
-  @Column(name = "category", length = 10)
+  @Column(name = "category", length = 50)
   private String category;
 
   @ApiModelProperty(notes = "Starting Date of the Event")
@@ -320,8 +320,7 @@ public class NgoEvent implements Serializable {
         + getCategory() + "'" + ", start_date='" + getStart_date() + "'" + ", end_date='" + getEnd_date() + "'"
         + ", start_time='" + getStart_time() + "'" + ", end_time='" + getEnd_time() + "'" + ", allow_reg='"
         + isAllow_reg() + "'" + ", img_url='" + getImg_url() + "'" + ", adult_price='" + getAdult_price() + "'"
-        + ", child_price='" + getChild_price() + "'" + ", location='" + getLocation() + "'" + ", tickets='"
-        + getTickets() + "'" + "}";
+        + ", child_price='" + getChild_price() + "'" + ", location='" + getLocation() + "'" + "}";
   }
 
 }

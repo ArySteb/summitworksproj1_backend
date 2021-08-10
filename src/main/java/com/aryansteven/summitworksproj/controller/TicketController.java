@@ -1,7 +1,6 @@
 package com.aryansteven.summitworksproj.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,12 +31,19 @@ public class TicketController {
   NgoUserService userServ;
 
   NgoTicket convert(TicketDto input) {
+    // System.out.println("AYYE [" + input.toString());
     Optional<NgoUser> user = userServ.getById(input.getUserId());
-    if (!user.isPresent())
+    if (!user.isPresent()) {
+      // System.out.println("User's fault");
+      // System.out.println(input.getUserId());
       return null;
+    }
     Optional<NgoEvent> event = eventServ.getById(input.getEventId());
-    if (!event.isPresent())
+    if (!event.isPresent()) {
+      // System.out.println("Event's fault");
+      // System.out.println(input.getEventId());
       return null;
+    }
 
     return new NgoTicket().address(input.getAddress()).adult_qty(input.getAdult_qty()).child_qty(input.getChild_qty())
         .contact_number(input.getContact_number()).email(input.getEmail()).first_name(input.getFirst_name())
@@ -55,8 +61,11 @@ public class TicketController {
   @ApiOperation(value = "/tickets", tags = "Ticket Controller", notes = "Post a Ticket")
   @PostMapping("/tickets")
   TicketDto postTicket(@RequestBody TicketDto newTicket) {
+    NgoTicket ticket = convert(newTicket);
 
-    return TicketDto.convertTicketToDto(ticketServ.addTicket(convert(newTicket)));
+    ticketServ.addTicket(ticket);
+
+    return TicketDto.convertTicketToDto(ticket);
   }
 
   @ApiOperation(value = "/tickets/{id}", tags = "Ticket Controller", notes = "Get a specific Ticket")
@@ -88,6 +97,16 @@ public class TicketController {
   @Autowired
   public void setTicketServ(NgoTicketService ticketServ) {
     this.ticketServ = ticketServ;
+  }
+
+  @Autowired
+  public void setUserServ(NgoUserService userServ) {
+    this.userServ = userServ;
+  }
+
+  @Autowired
+  public void setEventServ(NgoEventService eventServ) {
+    this.eventServ = eventServ;
   }
 
 }
